@@ -14,7 +14,7 @@ public class OrderService {
         this.repository = repository;
     }
 
-    public String getProductByCustomerName(String name){
+    public String getProductByCustomerName(String name) {
         return repository.getProductByCustomerName(name).stream()
                 .collect(Collectors.joining(", "));
     }

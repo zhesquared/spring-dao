@@ -6,12 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static ru.netology.sprongdao.dao.util.ScriptReader.read;
+import static ru.netology.sprongdao.dao.util.ScriptReader.getScript;
 
 @Repository
 public class OrderRepository {
 
-    private final String SCRIPT_NAME = "select_products.sql";
     private final NamedParameterJdbcTemplate template;
 
     public OrderRepository(NamedParameterJdbcTemplate template) {
@@ -19,10 +18,9 @@ public class OrderRepository {
     }
 
     public List<String> getProductByCustomerName(String name) {
-        String sqlQuery = read(SCRIPT_NAME);
+        String sqlQuery = getScript();
         var parameterSource = new MapSqlParameterSource("name", name);
 
-        return template.query(sqlQuery, parameterSource,
-                (rs, column) -> rs.getString("product_name"));
+        return template.queryForList(sqlQuery, parameterSource, String.class);
     }
 }

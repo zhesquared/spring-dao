@@ -1,7 +1,7 @@
 package ru.netology.sprongdao.dao.util;
 
-import lombok.experimental.UtilityClass;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,15 +9,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
-@UtilityClass
+@Service
 public class ScriptReader {
 
-    public static String read(String scriptFileName) {
-        try (InputStream is = new ClassPathResource(scriptFileName).getInputStream();
+    private final String SCRIPT_NAME = "select_products.sql";
+    private static String script;
+
+    public ScriptReader() {
+        try (InputStream is = new ClassPathResource(SCRIPT_NAME).getInputStream();
              BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is))) {
-            return bufferedReader.lines().collect(Collectors.joining("\n"));
+            script = bufferedReader.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String getScript() {
+        return script;
     }
 }
